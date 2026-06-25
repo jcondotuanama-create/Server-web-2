@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  # Pieza 1: Tu Servidor FastAPI
+  fastapi_app:
+    build: .
+    ports:
+      - "21080:21080"
+    restart: always
+
+  # Pieza 2: El Guardián Nginx con HTTPS
+  nginx_proxy:
+    image: nginx:alpine
+    ports:
+      - "443:443"  # Abre el puerto seguro hacia tu ordenador
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./proyecto.crt:/etc/nginx/certs/proyecto.crt:ro
+      - ./proyecto.key:/etc/nginx/certs/proyecto.key:ro
+    restart: always
